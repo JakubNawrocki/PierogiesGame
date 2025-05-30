@@ -36,37 +36,37 @@ export default class GameScene extends Phaser.Scene {
 
     preload() {
         // Enable transparency in all images
-        this.load.image(TextureKeys.BackgroundKitchen, 'assets/kitchen_background_main.png');
-        this.load.image(TextureKeys.BackgroundParallaxFar, 'assets/kitchen_background_parallax_far.png');
-        this.load.image(TextureKeys.BackgroundParallaxMiddle, 'assets/kitchen_background_parallax_middle.png');
-        this.load.image(TextureKeys.GroundKitchen, 'assets/kitchen_ground.png');
+        this.load.image(TextureKeys.BackgroundKitchen, 'public/assets/kitchen_background_main.png');
+        this.load.image(TextureKeys.BackgroundParallaxFar, 'public/assets/kitchen_background_parallax_far.png');
+        this.load.image(TextureKeys.BackgroundParallaxMiddle, 'public/assets/kitchen_background_parallax_middle.png');
+        this.load.image(TextureKeys.GroundKitchen, 'public/assets/kitchen_ground.png');
         
         // Updated frameWidth/Height to match our generated asset
-        this.load.spritesheet(TextureKeys.PlayerSpriteSheet, 'assets/player_spritesheet.png', { 
+        this.load.spritesheet(TextureKeys.PlayerSpriteSheet, 'public/assets/player_spritesheet.png', { 
             frameWidth: 64, 
             frameHeight: 64
         });
         
         // Load particle textures with explicit alpha channel support
-        this.load.image('dust', 'assets/dust_particle.png');
+        this.load.image('dust', 'public/assets/dust_particle.png');
         
         // Load obstacle images with explicit alpha channel support
-        this.load.image(TextureKeys.KnifeObstacle, 'assets/knife_obstacle.png');
-        this.load.image(TextureKeys.OnionObstacle, 'assets/onion_obstacle.png');
-        this.load.image(TextureKeys.KielbasaObstacle, 'assets/kielbasa_obstacle.png');
-        this.load.image(TextureKeys.GraterObstacle, 'assets/grater_obstacle.png');
-        this.load.image(TextureKeys.RollingPinObstacle, 'assets/rolling_pin_obstacle.png');
+        this.load.image(TextureKeys.KnifeObstacle, 'public/assets/knife_obstacle.png');
+        this.load.image(TextureKeys.OnionObstacle, 'public/assets/onion_obstacle.png');
+        this.load.image(TextureKeys.KielbasaObstacle, 'public/assets/kielbasa_obstacle.png');
+        this.load.image(TextureKeys.GraterObstacle, 'public/assets/grater_obstacle.png');
+        this.load.image(TextureKeys.RollingPinObstacle, 'public/assets/rolling_pin_obstacle.png');
         
         // Load collectible with explicit alpha channel support
-        this.load.image(TextureKeys.Pierogi, 'assets/pierogi_collectible.png');
-        this.load.image('pierogi_particle', 'assets/pierogi_particle.png');
-        this.load.image(TextureKeys.ObstacleKielbasa, 'assets/kielbasa_obstacle.png');
-        this.load.image(TextureKeys.ObstacleOnion, 'assets/onion_obstacle.png');
-        this.load.image(TextureKeys.ObstacleGrater, 'assets/grater_obstacle.png');
-        this.load.image(TextureKeys.ObstacleRollingPin, 'assets/rolling_pin_obstacle.png');
+        this.load.image(TextureKeys.Pierogi, 'public/assets/pierogi_collectible.png');
+        this.load.image('pierogi_particle', 'public/assets/pierogi_particle.png');
+        this.load.image(TextureKeys.ObstacleKielbasa, 'public/assets/kielbasa_obstacle.png');
+        this.load.image(TextureKeys.ObstacleOnion, 'public/assets/onion_obstacle.png');
+        this.load.image(TextureKeys.ObstacleGrater, 'public/assets/grater_obstacle.png');
+        this.load.image(TextureKeys.ObstacleRollingPin, 'public/assets/rolling_pin_obstacle.png');
         
-        this.load.image(TextureKeys.PauseIcon, 'assets/pause_icon.png');
-        this.load.image(TextureKeys.PlayIcon, 'assets/play_icon.png');
+        this.load.image(TextureKeys.PauseIcon, 'public/assets/pause_icon.png');
+        this.load.image(TextureKeys.PlayIcon, 'public/assets/play_icon.png');
     }
 
     async create() { // Make create async if you await holder status

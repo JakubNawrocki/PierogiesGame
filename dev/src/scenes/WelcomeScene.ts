@@ -12,8 +12,8 @@ export default class WelcomeScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(TextureKeys.BackgroundKitchen, '/assets/kitchen_background_main.png'); // Main background
-        this.load.image(TextureKeys.TitleBanner, '/assets/title_banner.png'); // Game title banner
+        this.load.image(TextureKeys.BackgroundKitchen, 'public/assets/kitchen_background_main.png'); // Main background
+        this.load.image(TextureKeys.TitleBanner, 'public/assets/title_banner.png'); // Game title banner
         // this.load.image(TextureKeys.ConnectWalletButton, 'assets/ui/connect_wallet_button.png'); // If you have a graphical button
     }
 
