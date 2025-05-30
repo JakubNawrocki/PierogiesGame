@@ -5,8 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "start": "parcel src/index.html --out-dir dev --open",
-    "build": "parcel build src/index.html --out-dir dist --public-url ./",
-    "postbuild": "cp -r public/assets dist/"
+    "build": "parcel build src/index.html --out-dir dist --public-url ./ && cp -r public/assets dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["phaser", "typescript", "game", "web3"],
   "author": "",
