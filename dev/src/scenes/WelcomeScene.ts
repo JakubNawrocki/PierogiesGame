@@ -12,18 +12,17 @@ export default class WelcomeScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image(TextureKeys.BackgroundKitchen, 'public/assets/kitchen_background_main.png'); // Main background
-        this.load.image(TextureKeys.TitleBanner, 'public/assets/title_banner.png'); // Game title banner
-        // this.load.image(TextureKeys.ConnectWalletButton, 'assets/ui/connect_wallet_button.png'); // If you have a graphical button
+        this.load.image(TextureKeys.BackgroundKitchen, 'assets/kitchen_background_main.png');
+        this.load.image(TextureKeys.TitleBanner, 'assets/title_banner.png'); // Assuming this is in public/assets/
+        // this.load.image(TextureKeys.ConnectWalletButton, 'assets/ui/connect_wallet_button.png'); // Path example if in subfolder
     }
 
     create() {
-        // Debug asset loading
         console.log("Creating welcome scene with assets:", TextureKeys.BackgroundKitchen, TextureKeys.TitleBanner);
         console.log("Asset cache keys:", Object.keys(this.textures.list));
         
         this.add.image(this.scale.width / 2, this.scale.height / 2, TextureKeys.BackgroundKitchen);
-        this.add.image(this.scale.width / 2, 150, TextureKeys.TitleBanner).setScale(0.8); // Adjust scale as needed
+        this.add.image(this.scale.width / 2, 150, TextureKeys.TitleBanner).setScale(0.8);
 
         const startText = this.add.text(this.scale.width / 2, this.scale.height / 2 + 50, 'Tap or Press SPACE to Start!', {
             fontSize: '32px', fill: '#FFFFFF', fontStyle: 'bold', stroke: '#000000', strokeThickness: 5,
@@ -46,23 +45,19 @@ export default class WelcomeScene extends Phaser.Scene {
             this.updateWalletStatus(account);
         });
 
-        // Check initial wallet status
         this.updateWalletStatus(getCurrentWalletAddress());
-         // Listen for account changes from MetamaskUtils
         document.addEventListener('walletAccountChanged', (event) => {
             const detail = (event as CustomEvent).detail;
             this.updateWalletStatus(detail);
         });
 
-
         const startAction = () => {
             if (this.input.manager.enabled) {
-                this.input.manager.enabled = false;
+                this.input.manager.enabled = false; // Prevent multiple starts
                 this.scene.start(SceneKeys.Game);
             }
         };
         this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            // Don't start game if clicking on connect wallet button
             if (this.connectWalletButtonText.getBounds().contains(pointer.x, pointer.y)) {
                 return;
             }
@@ -74,12 +69,12 @@ export default class WelcomeScene extends Phaser.Scene {
     private updateWalletStatus(account: string | null) {
         if (account) {
             this.connectWalletButtonText.setText('Wallet Connected');
-            this.connectWalletButtonText.disableInteractive(); // Or change its appearance
+            this.connectWalletButtonText.disableInteractive();
             this.connectWalletButtonText.setStyle({ fill: '#8BC34A'});
             this.walletStatusText.setText(`Connected: ${account.substring(0, 6)}...${account.substring(account.length - 4)}`);
         } else {
             this.connectWalletButtonText.setText('Connect Wallet');
-            this.connectWalletButtonText.setInteractive();
+            this.connectWalletButtonText.setInteractive(true); // Ensure it's re-enabled
             this.connectWalletButtonText.setStyle({ fill: '#4CAF50'});
             this.walletStatusText.setText('Not Connected');
         }
