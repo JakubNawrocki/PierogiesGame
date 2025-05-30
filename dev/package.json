@@ -1,0 +1,22 @@
+{
+  "name": "pierogies-runner-ts",
+  "version": "1.0.0",
+  "description": "Jetpack Joyride style game with Pierogies and Web3 integration",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "parcel src/index.html --out-dir dev --open",
+    "build": "parcel build src/index.html --out-dir dist --public-url ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["phaser", "typescript", "game", "web3"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "phaser": "^3.60.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.9.5"
+  }
+}
