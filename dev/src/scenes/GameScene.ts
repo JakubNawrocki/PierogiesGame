@@ -36,37 +36,41 @@ export default class GameScene extends Phaser.Scene {
 
     preload() {
         // Enable transparency in all images
-        this.load.image(TextureKeys.BackgroundKitchen, 'public/assets/kitchen_background_main.png');
-        this.load.image(TextureKeys.BackgroundParallaxFar, 'public/assets/kitchen_background_parallax_far.png');
-        this.load.image(TextureKeys.BackgroundParallaxMiddle, 'public/assets/kitchen_background_parallax_middle.png');
-        this.load.image(TextureKeys.GroundKitchen, 'public/assets/kitchen_ground.png');
+        this.load.image(TextureKeys.BackgroundKitchen, 'assets/kitchen_background_main.png');
+        this.load.image(TextureKeys.BackgroundParallaxFar, 'assets/kitchen_background_parallax_far.png');
+        this.load.image(TextureKeys.BackgroundParallaxMiddle, 'assets/kitchen_background_parallax_middle.png');
+        this.load.image(TextureKeys.GroundKitchen, 'assets/kitchen_ground.png');
         
         // Updated frameWidth/Height to match our generated asset
-        this.load.spritesheet(TextureKeys.PlayerSpriteSheet, 'public/assets/player_spritesheet.png', { 
+        this.load.spritesheet(TextureKeys.PlayerSpriteSheet, 'assets/player_spritesheet.png', { 
             frameWidth: 64, 
             frameHeight: 64
         });
         
         // Load particle textures with explicit alpha channel support
-        this.load.image('dust', 'public/assets/dust_particle.png');
+        this.load.image('dust', 'assets/dust_particle.png');
         
         // Load obstacle images with explicit alpha channel support
-        this.load.image(TextureKeys.KnifeObstacle, 'public/assets/knife_obstacle.png');
-        this.load.image(TextureKeys.OnionObstacle, 'public/assets/onion_obstacle.png');
-        this.load.image(TextureKeys.KielbasaObstacle, 'public/assets/kielbasa_obstacle.png');
-        this.load.image(TextureKeys.GraterObstacle, 'public/assets/grater_obstacle.png');
-        this.load.image(TextureKeys.RollingPinObstacle, 'public/assets/rolling_pin_obstacle.png');
+        this.load.image(TextureKeys.KnifeObstacle, 'assets/knife_obstacle.png');
+        this.load.image(TextureKeys.OnionObstacle, 'assets/onion_obstacle.png');
+        this.load.image(TextureKeys.KielbasaObstacle, 'assets/kielbasa_obstacle.png');
+        this.load.image(TextureKeys.GraterObstacle, 'assets/grater_obstacle.png');
+        this.load.image(TextureKeys.RollingPinObstacle, 'assets/rolling_pin_obstacle.png');
         
         // Load collectible with explicit alpha channel support
-        this.load.image(TextureKeys.Pierogi, 'public/assets/pierogi_collectible.png');
-        this.load.image('pierogi_particle', 'public/assets/pierogi_particle.png');
-        this.load.image(TextureKeys.ObstacleKielbasa, 'public/assets/kielbasa_obstacle.png');
-        this.load.image(TextureKeys.ObstacleOnion, 'public/assets/onion_obstacle.png');
-        this.load.image(TextureKeys.ObstacleGrater, 'public/assets/grater_obstacle.png');
-        this.load.image(TextureKeys.ObstacleRollingPin, 'public/assets/rolling_pin_obstacle.png');
+        this.load.image(TextureKeys.Pierogi, 'assets/pierogi_collectible.png');
+        this.load.image('pierogi_particle', 'assets/pierogi_particle.png');
         
-        this.load.image(TextureKeys.PauseIcon, 'public/assets/pause_icon.png');
-        this.load.image(TextureKeys.PlayIcon, 'public/assets/play_icon.png');
+        // FIX: Add this line to load the ObstacleKnife texture
+        this.load.image(TextureKeys.ObstacleKnife, 'assets/knife_obstacle.png');
+        
+        this.load.image(TextureKeys.ObstacleKielbasa, 'assets/kielbasa_obstacle.png');
+        this.load.image(TextureKeys.ObstacleOnion, 'assets/onion_obstacle.png');
+        this.load.image(TextureKeys.ObstacleGrater, 'assets/grater_obstacle.png');
+        this.load.image(TextureKeys.ObstacleRollingPin, 'assets/rolling_pin_obstacle.png');
+        
+        this.load.image(TextureKeys.PauseIcon, 'assets/pause_icon.png');
+        this.load.image(TextureKeys.PlayIcon, 'assets/play_icon.png');
     }
 
     async create() { // Make create async if you await holder status
@@ -325,79 +329,62 @@ export default class GameScene extends Phaser.Scene {
         const particles = this.add.particles(pierogi.x, pierogi.y, 'pierogi_particle', {
             speed: { min: 50, max: 150 },
             scale: { start: 0.4, end: 0 },
-            lifespan: 800,
+            lifespan: 600,
             blendMode: 'ADD',
-            quantity: 6,
-            emitting: false
+            quantity: 10
         });
         
-        // Emit particles once and then destroy
-        particles.explode(10, pierogi.x, pierogi.y);
-        this.time.delayedCall(800, () => particles.destroy());
+        // Auto-destroy particles after animation completes
+        this.time.delayedCall(600, () => {
+            particles.destroy();
+        });
         
-        // Animate score increase
-        const oldScore = this.score;
+        // Increase score
         this.score += 10;
         
-        // Create floating score text that rises and fades
-        const floatingText = this.add.text(pierogi.x, pierogi.y - 20, '+10', {
-            fontSize: '20px',
-            fontStyle: 'bold',
-            color: '#FFD700',
-            stroke: '#000',
-            strokeThickness: 3
-        }).setOrigin(0.5);
-        
-        // Animate the floating text
-        this.tweens.add({
-            targets: floatingText,
-            y: floatingText.y - 50,
-            alpha: 0,
-            duration: 1000,
-            ease: 'Power1',
-            onComplete: () => floatingText.destroy()
-        });
-        
-        // Update score with animation
-        this.tweens.addCounter({
-            from: oldScore,
-            to: this.score,
-            duration: 300,
-            ease: 'Power1',
-            onUpdate: (tween) => {
-                const value = Math.floor(tween.getValue());
-                this.scoreText.setText('Score: ' + value);
-            }
-        });
-        
-        // Add subtle screen flash
-        const flash = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0xFFD700, 0.2)
-            .setOrigin(0)
-            .setDepth(100)
-            .setBlendMode(Phaser.BlendModes.ADD);
-            
-        this.tweens.add({
-            targets: flash,
-            alpha: 0,
-            duration: 200,
-            onComplete: () => flash.destroy()
-        });
+        // Optional: Play sound
+        // this.sound.play('collect_sound');
     }
-    
+
     private togglePause() {
         this.isPaused = !this.isPaused;
+        
         if (this.isPaused) {
             this.pauseButton.setTexture(TextureKeys.PlayIcon);
             this.physics.pause();
             this.pauseTimers(true);
-            this.player.playerSprite.anims.pause();
-            this.scene.launch(SceneKeys.UI, { fromScene: SceneKeys.Game, type: 'pauseMenu' }); // Example
+            
+            // Optional: Show pause overlay
+            const overlay = this.add.rectangle(
+                this.cameras.main.scrollX + this.scale.width / 2, 
+                this.scale.height / 2, 
+                this.scale.width, 
+                this.scale.height, 
+                0x000000, 
+                0.5
+            ).setScrollFactor(0).setDepth(90);
+            
+            const pauseText = this.add.text(
+                this.cameras.main.scrollX + this.scale.width / 2, 
+                this.scale.height / 2, 
+                'PAUSED', 
+                { fontSize: '32px', fill: '#FFFFFF', fontStyle: 'bold' }
+            ).setOrigin(0.5).setScrollFactor(0).setDepth(91);
+            
+            // Store references to remove later
+            this.data.set('pauseOverlay', overlay);
+            this.data.set('pauseText', pauseText);
         } else {
             this.pauseButton.setTexture(TextureKeys.PauseIcon);
             this.physics.resume();
             this.pauseTimers(false);
-            if(this.player.playerSprite.anims.currentAnim) this.player.playerSprite.anims.resume();
-            this.scene.stop(SceneKeys.UI); // Example: stop general UI scene
+            
+            // Remove pause overlay
+            const overlay = this.data.get('pauseOverlay') as Phaser.GameObjects.Rectangle;
+            const pauseText = this.data.get('pauseText') as Phaser.GameObjects.Text;
+            
+            if (overlay) overlay.destroy();
+            if (pauseText) pauseText.destroy();
         }
     }
 
