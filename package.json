@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/index.html --out-dir dev --open",
     "build": "parcel build src/index.html --out-dir dist --public-url ./",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postbuild": "cp -r public/assets dist/"
   },
   "keywords": ["phaser", "typescript", "game", "web3"],
   "author": "",
