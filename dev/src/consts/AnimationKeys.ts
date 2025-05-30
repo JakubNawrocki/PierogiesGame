@@ -6,7 +6,7 @@ enum AnimationKeys {
     PlayerHit = 'player-hit',
     PlayerDead = 'player-dead',
 
-    // Other animated elements if any (e.g., jetpack flames if separate sprite)
+    // Other animated elements if any
 }
 
 export default AnimationKeys;

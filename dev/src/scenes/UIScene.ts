@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import SceneKeys from '../consts/SceneKeys';
-// Import GameScene if you need to cast to its type explicitly, e.g., for calling a public method.
-// import GameScene from './GameScene'; 
+// import TextureKeys from '../consts/TextureKeys'; // Not used directly for loading here, but good for consistency if UI has icons
 
 interface UISceneData {
     fromScene: SceneKeys;
@@ -53,13 +52,15 @@ export default class UIScene extends Phaser.Scene {
             fontSize: '32px', fill: '#F44336', backgroundColor: '#FFFFFF', padding: {x:10, y:5}
         }).setOrigin(0.5).setInteractive();
         quitButton.on('pointerdown', () => {
-            this.scene.stop(this.fromSceneKey); 
-            this.scene.stop(SceneKeys.UI);
-            // Ensure WelcomeScene is started, or another appropriate menu scene
-            const gameScene = this.scene.get(this.fromSceneKey);
-            if (gameScene && (gameScene as any).isPaused) { // Check if GameScene has an isPaused property
-                 (gameScene as any).isPaused = false; // Reset pause state if managing manually
+            const fromSceneInstance = this.scene.get(this.fromSceneKey);
+            if (fromSceneInstance) {
+                // Reset pause state if GameScene manages it via a public property
+                if (typeof (fromSceneInstance as any).isPaused !== 'undefined') {
+                    (fromSceneInstance as any).isPaused = false;
+                }
+                this.scene.stop(this.fromSceneKey);
             }
+            this.scene.stop(SceneKeys.UI);
             this.scene.start(SceneKeys.Welcome);
         }, this);
     }
@@ -68,12 +69,10 @@ export default class UIScene extends Phaser.Scene {
         this.scene.stop(SceneKeys.UI);
         if (this.fromSceneKey) {
             const fromSceneInstance = this.scene.get(this.fromSceneKey);
-            // Check if the scene has a 'togglePause' method and is currently paused
             if (fromSceneInstance && typeof (fromSceneInstance as any).togglePause === 'function' && (fromSceneInstance as any).isPaused) {
-                (fromSceneInstance as any).togglePause();
+                (fromSceneInstance as any).togglePause(); // Call GameScene's public togglePause method
             } else if (fromSceneInstance && fromSceneInstance.sys.isPaused()) {
-                 // Fallback if togglePause isn't the primary mechanism or if scene was paused by manager
-                fromSceneInstance.scene.resume();
+                fromSceneInstance.scene.resume(); // Fallback resume
             }
         }
     }

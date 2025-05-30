@@ -4,9 +4,6 @@ import TextureKeys from '../consts/TextureKeys';
 import Player from '../game/Player';
 // import { isUserHolder } from '../web3/ContractUtils';
 import { getCurrentWalletAddress } from '../web3/MetamaskUtils';
-// Assuming UIScene is correctly imported if GameScene needs to interact with its type, like in closeUI.
-// If GameScene defines a public togglePause method, UIScene can call it.
-// For now, removing explicit GameScene type cast in UIScene and relying on scene events or public methods if needed.
 
 export default class GameScene extends Phaser.Scene {
     private player!: Player;
@@ -24,7 +21,7 @@ export default class GameScene extends Phaser.Scene {
     private initialGameSpeed: number = 250;
     private maxGameSpeed: number = 500;
     
-    public isPaused: boolean = false; // Made public for UIScene if direct call needed, though event-based is often cleaner
+    public isPaused: boolean = false;
     private pauseKey!: Phaser.Input.Keyboard.Key;
     private pauseButton!: Phaser.GameObjects.Image;
 
@@ -38,35 +35,60 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        // Backgrounds
+        console.log("GameScene Preload - Checking Texture Keys:");
+        console.log("TextureKeys.BackgroundKitchen:", TextureKeys.BackgroundKitchen, typeof TextureKeys.BackgroundKitchen);
         this.load.image(TextureKeys.BackgroundKitchen, 'assets/kitchen_background_main.png');
+
+        console.log("TextureKeys.BackgroundParallaxFar:", TextureKeys.BackgroundParallaxFar, typeof TextureKeys.BackgroundParallaxFar);
         this.load.image(TextureKeys.BackgroundParallaxFar, 'assets/kitchen_background_parallax_far.png');
+
+        console.log("TextureKeys.BackgroundParallaxMiddle:", TextureKeys.BackgroundParallaxMiddle, typeof TextureKeys.BackgroundParallaxMiddle);
         this.load.image(TextureKeys.BackgroundParallaxMiddle, 'assets/kitchen_background_parallax_middle.png');
+
+        console.log("TextureKeys.GroundKitchen:", TextureKeys.GroundKitchen, typeof TextureKeys.GroundKitchen);
         this.load.image(TextureKeys.GroundKitchen, 'assets/kitchen_ground.png');
         
-        // Player
+        console.log("TextureKeys.PlayerSpriteSheet:", TextureKeys.PlayerSpriteSheet, typeof TextureKeys.PlayerSpriteSheet);
         this.load.spritesheet(TextureKeys.PlayerSpriteSheet, 'assets/player_spritesheet.png', { 
             frameWidth: 64, 
             frameHeight: 64
-        }); // Ensure this file exists at public/assets/player_spritesheet.png
+        }); // Ensure public/assets/player_spritesheet.png exists
         
-        // Particles
-        this.load.image(TextureKeys.DustParticle, 'assets/dust_particle.png');
-        this.load.image(TextureKeys.PierogiParticle, 'assets/pierogi_particle.png'); // Ensure this file exists
+        // Load particle textures using keys from TextureKeys.ts
+        console.log("TextureKeys.DustParticle:", TextureKeys.DustParticle, typeof TextureKeys.DustParticle);
+        this.load.image(TextureKeys.DustParticle, 'assets/dust_particle.png'); // Ensure public/assets/dust_particle.png exists
         
-        // Obstacles
+        // Load obstacle images - using standardized keys
+        console.log("TextureKeys.ObstacleKnife:", TextureKeys.ObstacleKnife, typeof TextureKeys.ObstacleKnife);
         this.load.image(TextureKeys.ObstacleKnife, 'assets/knife_obstacle.png');
+
+        console.log("TextureKeys.ObstacleOnion:", TextureKeys.ObstacleOnion, typeof TextureKeys.ObstacleOnion);
         this.load.image(TextureKeys.ObstacleOnion, 'assets/onion_obstacle.png');
+
+        console.log("TextureKeys.ObstacleKielbasa:", TextureKeys.ObstacleKielbasa, typeof TextureKeys.ObstacleKielbasa);
         this.load.image(TextureKeys.ObstacleKielbasa, 'assets/kielbasa_obstacle.png');
+
+        console.log("TextureKeys.ObstacleGrater:", TextureKeys.ObstacleGrater, typeof TextureKeys.ObstacleGrater);
         this.load.image(TextureKeys.ObstacleGrater, 'assets/grater_obstacle.png');
-        this.load.image(TextureKeys.ObstacleRollingPin, 'assets/rolling_pin_obstacle.png'); // Ensure this file exists
+
+        console.log("TextureKeys.ObstacleRollingPin:", TextureKeys.ObstacleRollingPin, typeof TextureKeys.ObstacleRollingPin);
+        this.load.image(TextureKeys.ObstacleRollingPin, 'assets/rolling_pin_obstacle.png'); // Ensure public/assets/rolling_pin_obstacle.png exists
         
-        // Collectible
-        this.load.image(TextureKeys.Pierogi, 'assets/pierogi_collectible.png');
+        // Load collectible
+        console.log("TextureKeys.Pierogi:", TextureKeys.Pierogi, typeof TextureKeys.Pierogi); // Error was reported near here
+        this.load.image(TextureKeys.Pierogi, 'assets/pierogi_collectible.png'); // This is line 54 in the pasted code from previous turn.
+
+        console.log("TextureKeys.PierogiParticle:", TextureKeys.PierogiParticle, typeof TextureKeys.PierogiParticle);
+        this.load.image(TextureKeys.PierogiParticle, 'assets/pierogi_particle.png'); // Ensure public/assets/pierogi_particle.png exists
         
         // UI Icons
+        console.log("TextureKeys.PauseIcon:", TextureKeys.PauseIcon, typeof TextureKeys.PauseIcon);
         this.load.image(TextureKeys.PauseIcon, 'assets/pause_icon.png');
-        this.load.image(TextureKeys.PlayIcon, 'assets/play_icon.png'); // Ensure this file exists
+
+        console.log("TextureKeys.PlayIcon:", TextureKeys.PlayIcon, typeof TextureKeys.PlayIcon);
+        this.load.image(TextureKeys.PlayIcon, 'assets/play_icon.png'); // Ensure public/assets/play_icon.png exists
+
+        console.log("GameScene Preload: All load calls initiated.");
     }
 
     async create() {
@@ -138,8 +160,8 @@ export default class GameScene extends Phaser.Scene {
         });
 
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-            this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-            this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.P);
+            if(this.input.keyboard.keys[Phaser.Input.Keyboard.KeyCodes.SPACE]) this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+            if(this.input.keyboard.keys[Phaser.Input.Keyboard.KeyCodes.P]) this.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.P);
         });
     }
 
@@ -311,19 +333,19 @@ export default class GameScene extends Phaser.Scene {
         this.tweens.add({ targets: flash, alpha: 0, duration: 200, onComplete: () => flash.destroy() });
     }
     
-    public togglePause() { // Made public for UIScene to call if needed, otherwise can be private
+    public togglePause() {
         this.isPaused = !this.isPaused;
         if (this.isPaused) {
             this.pauseButton.setTexture(TextureKeys.PlayIcon);
             this.physics.pause();
             this.pauseTimers(true);
-            if (this.player.playerSprite.anims.currentAnim) this.player.playerSprite.anims.pause(); // Check if anim exists
+            if (this.player.playerSprite.anims.currentAnim) this.player.playerSprite.anims.pause();
             this.scene.launch(SceneKeys.UI, { fromScene: SceneKeys.Game, type: 'pauseMenu' });
         } else {
             this.pauseButton.setTexture(TextureKeys.PauseIcon);
             this.physics.resume();
             this.pauseTimers(false);
-            if(this.player.playerSprite.anims.currentAnim && this.player.playerSprite.anims.isPaused) this.player.playerSprite.anims.resume(); // Check if anim exists and is paused
+            if(this.player.playerSprite.anims.currentAnim && this.player.playerSprite.anims.isPaused) this.player.playerSprite.anims.resume();
             this.scene.stop(SceneKeys.UI);
         }
     }

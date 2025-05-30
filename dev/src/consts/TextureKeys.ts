@@ -1,30 +1,32 @@
 enum TextureKeys {
-    // Backgrounds & UI
-    BackgroundKitchen = 'background-kitchen',
-    BackgroundParallaxFar = 'background-parallax-far',
-    BackgroundParallaxMiddle = 'background-parallax-middle',
-    GroundKitchen = 'ground-kitchen',
-    TitleBanner = 'title-banner',
-    ConnectWalletButton = 'connect-wallet-button', // If you use a graphical button
-    PauseIcon = 'pause-icon',
-    PlayIcon = 'play-icon',
+    // Backgrounds & Ground
+    BackgroundKitchen = 'background_kitchen',
+    BackgroundParallaxFar = 'background_parallax_far',
+    BackgroundParallaxMiddle = 'background_parallax_middle',
+    GroundKitchen = 'ground_kitchen',
+    TitleBanner = 'title_banner', // For Welcome Screen
 
-    // Player
-    PlayerSpriteSheet = 'player-spritesheet',
+    // Player & Collectibles
+    PlayerSpriteSheet = 'player_spritesheet',
+    Pierogi = 'pierogi_collectible',
 
-    // Obstacles (Standardized)
-    ObstacleKnife = 'obstacle-knife',
-    ObstacleOnion = 'obstacle-onion',
-    ObstacleKielbasa = 'obstacle-kielbasa',
-    ObstacleGrater = 'obstacle-grater',
-    ObstacleRollingPin = 'obstacle-rolling-pin',
+    // Obstacles (Standardized naming)
+    ObstacleKnife = 'obstacle_knife',
+    ObstacleKielbasa = 'obstacle_kielbasa',
+    ObstacleOnion = 'obstacle_onion',
+    ObstacleGrater = 'obstacle_grater',
+    ObstacleRollingPin = 'obstacle_rolling_pin',
 
-    // Collectibles
-    Pierogi = 'pierogi-collectible',
+    // UI Elements
+    PauseIcon = 'pause_icon',
+    PlayIcon = 'play_icon',
+    ConnectWalletButton = 'connect_wallet_button',
+    LeaderboardIcon = 'leaderboard_icon', // If used
+    ProfileIcon = 'profile_icon',     // If used
 
     // Particles
-    DustParticle = 'dust-particle',
-    PierogiParticle = 'pierogi-particle',
+    DustParticle = 'dust_particle',
+    PierogiParticle = 'pierogi_particle',
 }
 
 export default TextureKeys;

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import SceneKeys from '../consts/SceneKeys';
-import TextureKeys from '../consts/TextureKeys'; // Import TextureKeys
+import TextureKeys from '../consts/TextureKeys';
 import { getCurrentWalletAddress, signMessage } from '../web3/MetamaskUtils';
 // import { submitScoreToBackend } from '../web3/ContractUtils';
 
@@ -71,8 +71,8 @@ export default class GameOverScene extends Phaser.Scene {
                     });
                     this.time.delayedCall(2000, () => { particles.destroy(); });
                 } else {
-                    submitButton.setText('Sign & Submit Score'); // Revert text
-                    // Consider providing more user feedback here, e.g., an alert.
+                    submitButton.setText('Sign & Submit Score');
+                    // You might want to alert the user that signing failed or was cancelled.
                 }
             });
         } else {
@@ -84,7 +84,7 @@ export default class GameOverScene extends Phaser.Scene {
 
         const restartAction = () => {
             if (this.input.manager.enabled) {
-                this.input.manager.enabled = false; // Prevent multiple calls
+                this.input.manager.enabled = false;
                 const fadeOut = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0)
                     .setOrigin(0).setDepth(1000);
                 
@@ -94,9 +94,13 @@ export default class GameOverScene extends Phaser.Scene {
                         this.scene.stop(SceneKeys.GameOver);
                         const gameScene = this.scene.get(SceneKeys.Game);
                         if (gameScene) {
+                             // Ensure isPaused is reset if GameScene uses it this way
+                            if (typeof (gameScene as any).isPaused !== 'undefined') {
+                                (gameScene as any).isPaused = false;
+                            }
                             gameScene.scene.restart();
-                        } else { // Fallback if GameScene isn't active for some reason
-                            this.scene.start(SceneKeys.Game);
+                        } else {
+                            this.scene.start(SceneKeys.Game); // Fallback
                         }
                     }
                 });
